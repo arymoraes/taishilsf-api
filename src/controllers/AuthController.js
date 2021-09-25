@@ -67,63 +67,60 @@ class AuthController {
       return errorHandler(res, 500, 'Server error');
     }
   }
+
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      const user = await getConnection()
+        .createQueryBuilder()
+        .select('user')
+        .from(User, 'user')
+        .where('user.email = :email', { email })
+        .getOne();
+
+      if (!user) return errorHandler(res, 404, 'A user with this email does not exist');
+
+      const isValid = await bcrypt.compare(password, user.password);
+
+      if (!isValid) return errorHandler(res, 401, 'Invalid password');
+
+      const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+        expiresIn: 1000 * 60 * 60 * 24 * 7,
+      });
+
+      return res.status(200).json({
+        user: {
+          username: user.name,
+          email: user.email,
+          id: user.id,
+        },
+        token,
+      });
+    } catch (err) {
+      return errorHandler(res, 500, 'Server error');
+    }
+  }
+
+  async me(req, res) {
+    try {
+      const { user } = req;
+
+      const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+        expiresIn: 1000 * 60 * 60 * 24 * 7,
+      });
+
+      return res.status(200).json({
+        user: {
+          email: user.email,
+          name: user.name,
+          id: user.id,
+        },
+        token,
+      });
+    } catch (error) {
+      return errorHandler(res, 500, 'Server error');
+    }
+  }
 }
-
-//   async login(req, res) {
-//     try {
-//       const { email, password } = req.body;
-//       const user = await getConnection()
-//         .createQueryBuilder()
-//         .select('user')
-//         .from(User, 'user')
-//         .where('user.email = :email', { email })
-//         .getOne();
-
-//       if (!user) return errorHandler(res, 404, 'A user with this email does not exist');
-
-//       const isValid = await bcrypt.compare(password, user.password);
-
-//       if (!isValid) return errorHandler(res, 401, 'Invalid password');
-
-//       const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-//         expiresIn: 1000 * 60 * 60 * 24 * 7,
-//       });
-
-//       return res.status(200).json({
-//         user: {
-//           username: user.username,
-//           email: user.email,
-//           id: user.id,
-//         },
-//         token,
-//       });
-//     } catch (err) {
-//       return errorHandler(res, 500, 'Server error');
-//     }
-//   }
-
-//   async me(req, res) {
-//     try {
-//       const { user } = req;
-
-//       const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-//         expiresIn: 1000 * 60 * 60 * 24 * 7,
-//       });
-
-//       return res.status(200).json({
-//         user: {
-//           email: user.email,
-//           username: user.username,
-//           id: user.id,
-//           gender: user.gender,
-//           role: user.role,
-//         },
-//         token,
-//       });
-//     } catch (error) {
-//       return errorHandler(res, 500, 'Server error');
-//     }
-//   }
-// }
 
 module.exports = new AuthController();

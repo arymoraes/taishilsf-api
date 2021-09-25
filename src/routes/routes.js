@@ -10,8 +10,8 @@ router.get('/', (req, res) => res.status(200).send({
   
 // // Login and Signup
 router.post('/user/register', UserAuthController.register);
-// router.post('/user/login', UserAuthController.login);
-// router.get('/user/me', authMiddleware, UserAuthController.me);
+router.post('/user/login', UserAuthController.login);
+router.get('/user/me', authMiddleware, UserAuthController.me);
 // // router.post('/forgotPassword', ProviderControllers.forgotPassword);
 // // router.post('/resetPassword', ProviderControllers.resetPassword);
 // // router.get('/verify/:token', ProviderControllers.verify);
