@@ -10,7 +10,7 @@ const router = require('./routes/routes');
 const app = express();
 
 const corsConfig = {
-  origin: [process.env.FRONTEND_URL, 'http://localhost:4000'],
+  origin: ['*'], // Change this later
   credentials: true,
 };
 
