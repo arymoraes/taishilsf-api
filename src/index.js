@@ -9,10 +9,11 @@ const router = require('./routes/routes');
 
 const app = express();
 
-const corsConfig = {
-  origin: ['*'], // Change this later
-  credentials: true,
-};
+const corsConfig ={
+  origin:'*', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200,
+}
 
 app.use(bodyParser.json());
 // app.use(cors(corsConfig));
