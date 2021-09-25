@@ -27,11 +27,14 @@ app.use(router);
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-        synchronize: true,
-        logging: false,
-        entities: [
-            require("./entities/UserSchema")
-        ]
+      ssl: {
+        rejectUnauthorized: false
+      },
+      synchronize: true,
+      logging: false,
+      entities: [
+          require("./entities/UserSchema")
+      ]
     })
     app.listen(process.env.PORT, () => {
       console.log(`Server is up and listening on port ${process.env.PORT}.`);
