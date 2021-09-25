@@ -15,7 +15,7 @@ const corsConfig = {
 };
 
 app.use(bodyParser.json());
-app.use(cors(corsConfig));
+// app.use(cors(corsConfig));
 app.use(router);
 
 (async () => {
