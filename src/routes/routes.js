@@ -1,6 +1,7 @@
 const express = require('express');
 const authMiddleware = require('../middleware/auth');
 const UserAuthController = require('../controllers/AuthController');
+const EmailController = require('../controllers/EmailController');
 
 const router = express.Router();
 
@@ -16,8 +17,7 @@ router.get('/user/me', authMiddleware, UserAuthController.me);
 // // router.post('/resetPassword', ProviderControllers.resetPassword);
 // // router.get('/verify/:token', ProviderControllers.verify);
 
-// // Admin Routes
-// router.post('/admin/user/register', authMiddleware, adminAuthMiddleware, AdminUserController.addUser);
+router.post('/sendMail', EmailController.sendMail);
 
 // // readd middleware
 // router.get('/admin/games/', GameController.getGames);
