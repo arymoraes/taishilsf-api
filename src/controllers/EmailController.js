@@ -27,7 +27,7 @@ class EmailController {
       
       var mailOptions = {
         from: process.env.EMAIL,
-        to: process.env.EMAIL,
+        to: process.env.EMAIL_TO,
         subject: 'Novo contato',
         text,
       };
